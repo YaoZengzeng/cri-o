@@ -40,8 +40,9 @@ func ExecCmdWithStdStreams(stdin io.Reader, stdout, stderr io.Writer, name strin
 	cmd.Stdin = stdin
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
+	cmd.Env = append(cmd.Env, fmt.Sprintf("PATH=%s", os.Getenv("PATH")))
 
-	err := cmd.Run()
+	err := cmd.Start()
 	if err != nil {
 		return fmt.Errorf("`%v %v` failed: %v", name, strings.Join(args, " "), err)
 	}

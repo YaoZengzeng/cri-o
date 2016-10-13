@@ -135,10 +135,19 @@ func (r *Runtime) CreateContainer(c *Container) error {
 
 // StartContainer starts a container.
 func (r *Runtime) StartContainer(c *Container) error {
-	if err := utils.ExecCmdWithStdStreams(os.Stdin, os.Stdout, os.Stderr, r.path, "start", c.name); err != nil {
+	os.Chdir(c.bundlePath)
+	if err := utils.ExecCmdWithStdStreams(os.Stdin, os.Stdout, os.Stderr, r.path, "start", c.name, "--pid-file", "pidfile"); err != nil {
 		return err
 	}
-	c.state.Started = time.Now()
+	time.Sleep(3 * time.Second)
+
+	pid, err := ioutil.ReadFile("pidfile")
+	if err != nil {
+		return fmt.Errorf("read pid file failed")
+	}
+	fmt.Println("container PID:", string(pid))
+	logrus.Infof("Received container pid: %v", string(pid))
+	//c.state.Started = time.Now()
 	return nil
 }
 

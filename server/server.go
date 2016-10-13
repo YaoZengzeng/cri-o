@@ -251,7 +251,7 @@ func New(runtimePath, root, sandboxDir, containerDir, conmonPath, pausePath stri
 	s.ctrIDIndex = truncindex.NewTruncIndex([]string{})
 	s.ctrNameIndex = registrar.NewRegistrar()
 
-	s.restore()
+	//s.restore()
 
 	logrus.Debugf("sandboxes: %v", s.state.sandboxes)
 	logrus.Debugf("containers: %v", s.state.containers)
